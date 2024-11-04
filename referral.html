@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrance Referral System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --studio-black: #1A1A1A;
+            --studio-gray: #2C2C2C;
+            --studio-border: #3A3A3A;
+            --studio-red: #FF3B3B;
+            --studio-red-hover: #FF2424;
+            --studio-green: #00FF8C;
+        }
+
+        body {
+            background-color: var(--studio-black);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FF3B3B 0%, #FF2424 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background: rgba(44, 44, 44, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--studio-border);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #FF3B3B 0%, #FF2424 100%);
+            transition: width 0.5s ease;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti 5s ease-in-out infinite;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-[#1A1A1A]/80 backdrop-blur-lg border-b border-[#3A3A3A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-broadcast-tower text-[#FF3B3B] text-2xl"></i>
+                        <span class="text-xl font-bold">Vrance</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-400">
+                        Welcome back, <span class="text-white">John Doe</span>
+                    </span>
+                    <button class="bg-[#FF3B3B] hover:bg-[#FF2424] text-white px-4 py-2 rounded-lg transition-colors">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 pb-12">
+        <!-- Hero Section -->
+        <section class="py-12 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold mb-4">
+                        Your Referral <span class="gradient-text">Dashboard</span>
+                    </h1>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Share Vrance with your network and earn incredible rewards. 
+                        The more you share, the more you earn!
+                    </p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-gray-400">Total Referrals</div>
+                            <div class="w-10 h-10 rounded-full bg-[#FF3B3B]/10 flex items-center justify-center">
+                                <i class="fas fa-users text-[#FF3B3B]"></i>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold mb-2">128</div>
+                        <div class="text-[#00FF8C] text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            +12% this week
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-gray-400">Rewards Earned</div>
+                            <div class="w-10 h-10 rounded-full bg-[#FF3B3B]/10 flex items-center justify-center">
+                                <i class="fas fa-gift text-[#FF3B3B]"></i>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold mb-2">$1,280</div>
+                        <div class="text-[#00FF8C] text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            +5% this week
+                        </div>
+                    </div>
+
+                    <div class="card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-gray-400">Conversion Rate</div>
+                            <div class="w-10 h-10 rounded-full bg-[#FF3B3B]/10 flex items-center justify-center">
+                                <i class="fas fa-chart-line text-[#FF3B3B]"></i>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold mb-2">45.8%</div>
+                        <div class="text-[#00FF8C] text-sm">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            +2.4% this week
+                        </div>
+                    </div>
+                </div>
+
+<!-- Referral Link Section -->
+<section class="mb-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="card rounded-xl p-8">
+            <h2 class="text-2xl font-bold mb-6">Your Referral Link</h2>
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="flex-grow">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            value="https://vrance.ai/ref/JOHN123" 
+                            class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B]"
+                            readonly
+                            id="referral-link"
+                        >
+                        <button 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                            onclick="copyReferralLink()"
+                        >
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button 
+                        onclick="shareOnTwitter()"
+                        class="flex-1 md:flex-none px-6 py-3 bg-[#1DA1F2] hover:bg-[#1a94e0] rounded-lg transition-colors flex items-center justify-center"
+                    >
+                        <i class="fab fa-twitter mr-2"></i>
+                        Tweet
+                    </button>
+                    <button 
+                        onclick="shareOnLinkedIn()"
+                        class="flex-1 md:flex-none px-6 py-3 bg-[#0A66C2] hover:bg-[#095196] rounded-lg transition-colors flex items-center justify-center"
+                    >
+                        <i class="fab fa-linkedin mr-2"></i>
+                        Share
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
+                <div class="bg-[#1A1A1A] rounded-lg p-4">
+                    <div class="text-gray-400 mb-1">Link Clicks</div>
+                    <div class="text-xl font-bold">1,248</div>
+                </div>
+                <div class="bg-[#1A1A1A] rounded-lg p-4">
+                    <div class="text-gray-400 mb-1">Sign-ups</div>
+                    <div class="text-xl font-bold">128</div>
+                </div>
+                <div class="bg-[#1A1A1A] rounded-lg p-4">
+                    <div class="text-gray-400 mb-1">Conversion Rate</div>
+                    <div class="text-xl font-bold">10.3%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rewards Progress -->
+<section class="mb-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="card rounded-xl p-8">
+            <h2 class="text-2xl font-bold mb-6">Rewards Progress</h2>
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span>Level 1: Early Adopter</span>
+                        <span class="text-[#00FF8C]">Completed!</span>
+                    </div>
+                    <div class="h-3 bg-[#1A1A1A] rounded-full overflow-hidden">
+                        <div class="h-full bg-[#00FF8C] w-full rounded-full"></div>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-400">
+                        Reward: 1 Month Free + $100 Credit
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span>Level 2: Growth Partner</span>
+                        <span>8/10 Referrals</span>
+                    </div>
+                    <div class="h-3 bg-[#1A1A1A] rounded-full overflow-hidden">
+                        <div class="h-full progress-bar w-4/5 rounded-full"></div>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-400">
+                        Reward: 3 Months Free + $500 Credit
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span>Level 3: Elite Partner</span>
+                        <span>12/25 Referrals</span>
+                    </div>
+                    <div class="h-3 bg-[#1A1A1A] rounded-full overflow-hidden">
+                        <div class="h-full progress-bar w-2/5 rounded-full"></div>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-400">
+                        Reward: 6 Months Free + $2,000 Credit
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leaderboard -->
+<section class="mb-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="card rounded-xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Top Referrers</h2>
+                <div class="text-sm text-gray-400">
+                    Updated every hour
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-400">
+                            <th class="pb-4">Rank</th>
+                            <th class="pb-4">User</th>
+                            <th class="pb-4">Referrals</th>
+                            <th class="pb-4">Conversion</th>
+                            <th class="pb-4">Rewards</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-[#3A3A3A]">
+                            <td class="py-4">
+                                <div class="w-8 h-8 rounded-full bg-[#FFD700] flex items-center justify-center">1</div>
+                            </td>
+                            <td class="py-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-[#3A3A3A] flex items-center justify-center mr-2">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">Sarah Johnson</div>
+                                        <div class="text-sm text-gray-400">Elite Partner</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4">256</td>
+                            <td class="py-4">
+                                <div class="text-[#00FF8C]">48.5%</div>
+                            </td>
+                            <td class="py-4">$2,560</td>
+                        </tr>
+                        <!-- More leaderboard entries... -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Analytics Section -->
+<section class="mb-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="card rounded-xl p-8">
+            <h2 class="text-2xl font-bold mb-6">Performance Analytics</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Chart Container -->
+                <div class="bg-[#1A1A1A] rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">Referral Trends</h3>
+                    <canvas id="referralChart" height="300"></canvas>
+                </div>
+                
+                <!-- Geographic Distribution -->
+                <div class="bg-[#1A1A1A] rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">Geographic Distribution</h3>
+                    <canvas id="geoChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Share Modal -->
+<div id="shareModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+    <div class="bg-[#2C2C2C] rounded-xl p-8 max-w-md w-full mx-4">
+        <h3 class="text-xl font-bold mb-4">Share Your Link</h3>
+        <div class="space-y-4">
+            <div class="relative">
+                <textarea 
+                    id="shareMessage" 
+                    rows="3" 
+                    class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B]"
+                >🚀 Join me on Vrance - The future of business broadcasting! Use my referral link to get started:</textarea>
+                <button 
+                    onclick="copyShareMessage()"
+                    class="absolute right-2 top-2 text-gray-400 hover:text-white"
+                >
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <div class="flex gap-2">
+                <button 
+                    onclick="shareCustom('twitter')"
+                    class="flex-1 px-4 py-2 bg-[#1DA1F2] hover:bg-[#1a94e0] rounded-lg transition-colors"
+                >
+                    <i class="fab fa-twitter mr-2"></i>
+                    Twitter
+                </button>
+                <button 
+                    onclick="shareCustom('linkedin')"
+                    class="flex-1 px-4 py-2 bg-[#0A66C2] hover:bg-[#095196] rounded-lg transition-colors"
+                >
+                    <i class="fab fa-linkedin mr-2"></i>
+                    LinkedIn
+                </button>
+                <button 
+                    onclick="shareCustom('whatsapp')"
+                    class="flex-1 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] rounded-lg transition-colors"
+                >
+                    <i class="fab fa-whatsapp mr-2"></i>
+                    WhatsApp
+                </button>
+            </div>
+        </div>
+        <button 
+            onclick="closeShareModal()"
+            class="mt-4 w-full px-4 py-2 bg-[#3A3A3A] hover:bg-[#4A4A4A] rounded-lg transition-colors"
+        >
+            Close
+        </button>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="fixed bottom-4 right-4 bg-[#FF3B3B] text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Utility Functions
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.remove('translate-y-full', 'opacity-0');
+    setTimeout(() => {
+        toast.classList.add('translate-y-full', 'opacity-0');
+    }, 3000);
+}
+
+// Referral Link Management
+function copyReferralLink() {
+    const link = document.getElementById('referral-link');
+    navigator.clipboard.writeText(link.value)
+        .then(() => showToast('Referral link copied!'))
+        .catch(() => showToast('Failed to copy link'));
+}
+
+// Share Modal Management
+function openShareModal() {
+    document.getElementById('shareModal').classList.remove('hidden');
+    document.getElementById('shareModal').classList.add('flex');
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').classList.add('hidden');
+    document.getElementById('shareModal').classList.remove('flex');
+}
+
+function copyShareMessage() {
+    const message = document.getElementById('shareMessage');
+    navigator.clipboard.writeText(message.value + '\n' + document.getElementById('referral-link').value)
+        .then(() => showToast('Message copied!'))
+        .catch(() => showToast('Failed to copy message'));
+}
+
+// Social Sharing
+function shareCustom(platform) {
+    const message = encodeURIComponent(document.getElementById('shareMessage').value);
+    const link = encodeURIComponent(document.getElementById('referral-link').value);
+    
+    let url;
+    switch(platform) {
+        case 'twitter':
+            url = `https://twitter.com/intent/tweet?text=${message}&url=${link}`;
+            break;
+        case 'linkedin':
+            url = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`;
+            break;
+        case 'whatsapp':
+            url = `https://wa.me/?text=${message}%20${link}`;
+            break;
+    }
+    
+    window.open(url, '_blank');
+    closeShareModal();
+}
+
+// Charts
+function initCharts() {
+    // Referral Trends Chart
+    const referralCtx = document.getElementById('referralChart').getContext('2d');
+    new Chart(referralCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Referrals',
+                data: [12, 19, 25, 32, 45, 55],
+                borderColor: '#FF3B3B',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#3A3A3A'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: '#3A3A3A'
+                    }
+                }
+            }
+        }
+    });
+
+    // Geographic Distribution Chart
+    const geoCtx = document.getElementById('geoChart').getContext('2d');
+    new Chart(geoCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['North America', 'Europe', 'Asia', 'Others'],
+            datasets: [{
+                data: [45, 25, 20, 10],
+                backgroundColor: ['#FF3B3B', '#FF6B6B', '#FF9B9B', '#FFCBCB']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+}
+
+// Progress Animation
+function animateProgress() {
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+        const targetWidth = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = targetWidth;
+        }, 300);
+    });
+}
+
+// Confetti Effect for Achievements
+function createConfetti() {
+    const colors = ['#FF3B3B', '#FF6B6B', '#FF9B9B', '#FFCBCB'];
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// Initialize Everything
+document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+    animateProgress();
+    
+    // Example: Trigger confetti when achieving a milestone
+    if (document.querySelector('.text-[#00FF8C]')) {
+        createConfetti();
+    }
+});
+
+// Real-time Updates Simulation
+setInterval(() => {
+    const stats = document.querySelectorAll('[data-stat]');
+    stats.forEach(stat => {
+        const currentValue = parseInt(stat.textContent);
+        const newValue = currentValue + Math.floor(Math.random() * 5);
+        stat.textContent = newValue;
+        stat.classList.add('pulse');
+        setTimeout(() => stat.classList.remove('pulse'), 500);
+    });
+}, 5000);
+</script>
+</body>
+</html>

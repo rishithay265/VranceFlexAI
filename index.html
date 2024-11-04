@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrance - The Future of Business Broadcasting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.7.1/dist/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --studio-black: #1A1A1A;
+            --studio-gray: #2C2C2C;
+            --studio-border: #3A3A3A;
+            --studio-red: #FF3B3B;
+            --studio-red-hover: #FF2424;
+            --studio-green: #00FF8C;
+        }
+
+        body {
+            background-color: var(--studio-black);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FF3B3B 0%, #FF2424 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 59, 59, 0.3);
+        }
+
+        .card {
+            background: rgba(44, 44, 44, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--studio-border);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--studio-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--studio-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--studio-border);
+        }
+
+        /* Progress Bar */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            stroke: var(--studio-red);
+        }
+
+        /* Form Styles */
+        .input-glow:focus {
+            box-shadow: 0 0 15px rgba(255, 59, 59, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-[#FF3B3B] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-white text-lg">Initializing AI Systems...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-[#1A1A1A]/80 backdrop-blur-lg border-b border-[#3A3A3A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-broadcast-tower text-[#FF3B3B] mr-2"></i>
+                        Vrance
+                    </span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-transparent hover:bg-[#2C2C2C] text-white px-4 py-2 rounded-lg transition-colors">
+                        For Investors
+                    </button>
+                    <button class="bg-[#FF3B3B] hover:bg-[#FF2424] text-white px-6 py-2 rounded-lg transition-colors">
+                        Join Waitlist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen pt-32 relative overflow-hidden">
+        <div class="animation-container" id="hero-animation"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    <span class="gradient-text">Broadcast</span> Your Business<br>
+                    to the <span class="gradient-text">World</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Let AI handle your business listings and PR distribution while you focus on what matters most - growing your business.
+                </p>
+                
+                <!-- Waitlist Form -->
+                <div class="max-w-md mx-auto">
+                    <div class="bg-[#2C2C2C] p-6 rounded-xl border border-[#3A3A3A]">
+                        <h3 class="text-lg font-semibold mb-4">Join the Waitlist</h3>
+                        <form id="waitlist-form" class="space-y-4">
+                            <input type="email" placeholder="Enter your email" class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B] input-glow">
+                            <button type="submit" class="w-full bg-[#FF3B3B] hover:bg-[#FF2424] text-white py-3 rounded-lg transition-colors">
+                                Get Early Access
+                            </button>
+                        </form>
+                        <p class="mt-4 text-sm text-gray-400">
+                            <span class="text-[#00FF8C]">243</span> businesses already on waitlist
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Features Section -->
+<section class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- AI Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            <div class="card p-6 rounded-xl hover:bg-[#2C2C2C]/50 transition-all">
+                <div class="w-12 h-12 bg-[#FF3B3B]/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-robot text-[#FF3B3B] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">AI-Powered Distribution</h3>
+                <p class="text-gray-400">Smart algorithms that understand your business and target the right platforms automatically.</p>
+                <div class="mt-4 flex items-center text-sm text-[#00FF8C]">
+                    <span>Save 40+ hours/month</span>
+                    <i class="fas fa-arrow-trend-up ml-2"></i>
+                </div>
+            </div>
+
+            <div class="card p-6 rounded-xl hover:bg-[#2C2C2C]/50 transition-all">
+                <div class="w-12 h-12 bg-[#FF3B3B]/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-globe text-[#FF3B3B] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Global Reach</h3>
+                <p class="text-gray-400">Instant access to 1000+ business directories and PR platforms worldwide.</p>
+                <div class="mt-4 flex items-center text-sm text-[#00FF8C]">
+                    <span>150+ Countries</span>
+                    <i class="fas fa-earth-americas ml-2"></i>
+                </div>
+            </div>
+
+            <div class="card p-6 rounded-xl hover:bg-[#2C2C2C]/50 transition-all">
+                <div class="w-12 h-12 bg-[#FF3B3B]/10 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-gauge-high text-[#FF3B3B] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Real-time Monitoring</h3>
+                <p class="text-gray-400">Live analytics and performance tracking for all your submissions.</p>
+                <div class="mt-4 flex items-center text-sm text-[#00FF8C]">
+                    <span>99.9% Success Rate</span>
+                    <i class="fas fa-chart-line ml-2"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI Calculator -->
+        <div class="bg-[#2C2C2C] rounded-2xl p-8 mb-20">
+            <h2 class="text-3xl font-bold mb-6">See Your Potential Savings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Monthly Submissions</label>
+                        <input type="range" min="10" max="100" value="50" class="w-full" id="submissions-range">
+                        <div class="flex justify-between text-sm mt-1">
+                            <span>10</span>
+                            <span id="submissions-value">50</span>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Your Hourly Rate ($)</label>
+                        <input type="number" value="50" min="0" class="w-full bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg px-4 py-2" id="hourly-rate">
+                    </div>
+                </div>
+                <div class="bg-[#1A1A1A] rounded-xl p-6">
+                    <h4 class="text-lg font-semibold mb-4">Your Monthly Savings</h4>
+                    <div class="text-4xl font-bold text-[#00FF8C] mb-4">$<span id="monthly-savings">2,000</span></div>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex justify-between">
+                            <span>Time Saved:</span>
+                            <span class="text-white"><span id="time-saved">40</span> hours</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Success Rate Improvement:</span>
+                            <span class="text-white">+45%</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Global Reach:</span>
+                            <span class="text-white">150+ Countries</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral Program -->
+        <div class="text-center mb-20">
+            <h2 class="text-3xl font-bold mb-6">Earn Early Access & Rewards</h2>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+                Invite your network and unlock exclusive benefits. The more you share, the more you earn.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="card p-6 rounded-xl text-left">
+                    <div class="text-[#FF3B3B] font-semibold mb-2">Level 1</div>
+                    <h3 class="text-lg font-semibold mb-2">3 Referrals</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>✓ 1 Month Free</li>
+                        <li>✓ Early Access</li>
+                        <li>✓ Priority Support</li>
+                    </ul>
+                </div>
+                <div class="card p-6 rounded-xl text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-[#FF3B3B] text-white text-xs px-2 py-1">Popular</div>
+                    <div class="text-[#FF3B3B] font-semibold mb-2">Level 2</div>
+                    <h3 class="text-lg font-semibold mb-2">10 Referrals</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>✓ 3 Months Free</li>
+                        <li>✓ VIP Early Access</li>
+                        <li>✓ Custom Features</li>
+                        <li>✓ Marketing Kit</li>
+                    </ul>
+                </div>
+                <div class="card p-6 rounded-xl text-left">
+                    <div class="text-[#FF3B3B] font-semibold mb-2">Level 3</div>
+                    <h3 class="text-lg font-semibold mb-2">25 Referrals</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>✓ 6 Months Free</li>
+                        <li>✓ Lifetime Discount</li>
+                        <li>✓ Partner Benefits</li>
+                        <li>✓ Custom Integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+<!-- Investor Section -->
+<section class="py-20 bg-[#1A1A1A] relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Investment Opportunity -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-6">Investment Opportunity</h2>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+                Join us in revolutionizing how businesses manage their global presence. 
+                We're raising funds to accelerate our growth and expand our AI capabilities.
+            </p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <div class="card p-6 rounded-xl">
+                <div class="text-[#FF3B3B] text-3xl font-bold mb-2">$4.2M</div>
+                <div class="text-gray-400">ARR Projection</div>
+                <div class="mt-2 text-sm text-[#00FF8C]">+245% Growth</div>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <div class="text-[#FF3B3B] text-3xl font-bold mb-2">15,000+</div>
+                <div class="text-gray-400">Waitlist Signups</div>
+                <div class="mt-2 text-sm text-[#00FF8C]">Growing Daily</div>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <div class="text-[#FF3B3B] text-3xl font-bold mb-2">150+</div>
+                <div class="text-gray-400">Countries Reached</div>
+                <div class="mt-2 text-sm text-[#00FF8C]">Global Scale</div>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <div class="text-[#FF3B3B] text-3xl font-bold mb-2">98.7%</div>
+                <div class="text-gray-400">Success Rate</div>
+                <div class="mt-2 text-sm text-[#00FF8C]">AI-Powered</div>
+            </div>
+        </div>
+
+        <!-- Investment Tiers -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="card p-8 rounded-xl">
+                <div class="text-lg font-semibold mb-4">Seed Round</div>
+                <div class="text-3xl font-bold mb-4">$500K - $1M</div>
+                <div class="text-gray-400 mb-6">
+                    Early-stage investment opportunity with significant equity offering
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Board seat opportunity</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Strategic partnership</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Priority features</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-[#FF3B3B] hover:bg-[#FF2424] text-white py-3 rounded-lg transition-colors">
+                    Request Pitch Deck
+                </button>
+            </div>
+
+            <div class="card p-8 rounded-xl relative border-[#FF3B3B]">
+                <div class="absolute -top-4 right-4 bg-[#FF3B3B] text-white text-sm px-4 py-1 rounded-full">
+                    Featured
+                </div>
+                <div class="text-lg font-semibold mb-4">Series A</div>
+                <div class="text-3xl font-bold mb-4">$1M - $5M</div>
+                <div class="text-gray-400 mb-6">
+                    Growth stage investment with strategic expansion plans
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Multiple board seats</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Global expansion rights</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Tech partnership options</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Custom development team</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-[#FF3B3B] hover:bg-[#FF2424] text-white py-3 rounded-lg transition-colors">
+                    Schedule Call
+                </button>
+            </div>
+
+            <div class="card p-8 rounded-xl">
+                <div class="text-lg font-semibold mb-4">Strategic Partner</div>
+                <div class="text-3xl font-bold mb-4">$5M+</div>
+                <div class="text-gray-400 mb-6">
+                    Major stake with strategic control and expansion opportunities
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Majority stakeholder</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Full control rights</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                        <span>Global licensing</span>
+                    </li>
+                </ul>
+                <button class="w-full bg-[#FF3B3B] hover:bg-[#FF2424] text-white py-3 rounded-lg transition-colors">
+                    Contact CEO
+                </button>
+            </div>
+        </div>
+
+        <!-- Investor Contact -->
+        <div class="bg-[#2C2C2C] rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-4">Ready to Invest?</h3>
+            <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
+                Schedule a private demo and discussion with our founders. 
+                Get exclusive access to our financial projections and growth strategy.
+            </p>
+            <form class="max-w-md mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <input type="text" placeholder="Name" class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B] input-glow">
+                    <input type="email" placeholder="Email" class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B] input-glow">
+                </div>
+                <div class="mb-4">
+                    <input type="text" placeholder="Company" class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B] input-glow">
+                </div>
+                <div class="mb-4">
+                    <select class="w-full px-4 py-3 bg-[#1A1A1A] border border-[#3A3A3A] rounded-lg focus:outline-none focus:border-[#FF3B3B] input-glow">
+                        <option>Investment Range</option>
+                        <option>$500K - $1M</option>
+                        <option>$1M - $5M</option>
+                        <option>$5M+</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-[#FF3B3B] hover:bg-[#FF2424] text-white py-3 rounded-lg transition-colors">
+                    Request Investment Info
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center mb-16">Launch Roadmap</h2>
+        <div class="relative">
+            <!-- Timeline Line -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#3A3A3A]"></div>
+            
+            <!-- Timeline Items -->
+            <div class="space-y-20">
+                <div class="relative">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div class="w-4 h-4 rounded-full bg-[#FF3B3B] glow"></div>
+                    </div>
+                    <div class="ml-[calc(50%+2rem)] pl-8 relative">
+                        <div class="card p-6 rounded-xl inline-block">
+                            <div class="text-[#FF3B3B] font-semibold mb-2">Phase 1 - Current</div>
+                            <h3 class="text-xl font-bold mb-2">Early Access & Development</h3>
+                            <ul class="space-y-2 text-gray-400">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                                    <span>Core AI Development</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-[#00FF8C] mr-2"></i>
+                                    <span>Platform Integration</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-spinner fa-spin text-[#FF3B3B] mr-2"></i>
+                                    <span>Beta Testing</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div class="w-4 h-4 rounded-full bg-[#3A3A3A]"></div>
+                    </div>
+                    <div class="mr-[calc(50%+2rem)] pr-8 relative text-right">
+                        <div class="card p-6 rounded-xl inline-block">
+                            <div class="text-[#FF3B3B] font-semibold mb-2">Phase 2 - Q2 2024</div>
+                            <h3 class="text-xl font-bold mb-2">Global Launch</h3>
+                            <ul class="space-y-2 text-gray-400">
+                                <li class="flex items-center justify-end">
+                                    <span>Public Release</span>
+                                    <i class="fas fa-rocket text-[#FF3B3B] ml-2"></i>
+                                </li>
+                                <li class="flex items-center justify-end">
+                                    <span>Advanced Analytics</span>
+                                    <i class="fas fa-chart-line text-[#FF3B3B] ml-2"></i>
+                                </li>
+                                <li class="flex items-center justify-end">
+                                    <span>API Access</span>
+                                    <i class="fas fa-code text-[#FF3B3B] ml-2"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div class="w-4 h-4 rounded-full bg-[#3A3A3A]"></div>
+                    </div>
+                    <div class="ml-[calc(50%+2rem)] pl-8 relative">
+                        <div class="card p-6 rounded-xl inline-block">
+                            <div class="text-[#FF3B3B] font-semibold mb-2">Phase 3 - Q4 2024</div>
+                            <h3 class="text-xl font-bold mb-2">AI Evolution</h3>
+                            <ul class="space-y-2 text-gray-400">
+                                <li class="flex items-center">
+                                    <i class="fas fa-brain text-[#FF3B3B] mr-2"></i>
+                                    <span>Advanced AI Features</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-globe text-[#FF3B3B] mr-2"></i>
+                                    <span>Global Expansion</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-handshake text-[#FF3B3B] mr-2"></i>
+                                    <span>Strategic Partnerships</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof -->
+<section class="py-20 bg-[#2C2C2C]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center mb-16">What Early Users Say</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card p-6 rounded-xl">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-[#3A3A3A] flex items-center justify-center mr-4">
+                        <i class="fas fa-user text-[#FF3B3B]"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Sarah Johnson</div>
+                        <div class="text-sm text-gray-400">CEO, TechStart</div>
+                    </div>
+                </div>
+                <p class="text-gray-400">"Vrance has completely transformed how we handle our business listings. The AI automation is simply incredible."</p>
+                <div class="mt-4 flex text-[#FF3B3B]">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- More testimonials... -->
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[#1A1A1A] border-t border-[#3A3A3A] py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-broadcast-tower text-[#FF3B3B] text-2xl mr-2"></i>
+                    <span class="text-xl font-bold">Vrance</span>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Revolutionizing how businesses broadcast their presence globally through AI-powered automation.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Company</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Press</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="mt-8 pt-8 border-t border-[#3A3A3A] text-center text-gray-400">
+            <p>&copy; 2024 Vrance. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+// Loading Screen
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }, 1500);
+});
+
+// Live Statistics Update
+class LiveStats {
+    constructor() {
+        this.stats = {
+            submissions: { value: 1248, min: 1200, max: 1300 },
+            successRate: { value: 80.7, min: 75, max: 85 },
+            countries: { value: 98, min: 94, max: 102 }
+        };
+        this.updateInterval = 3000;
+        this.init();
+    }
+
+    init() {
+        this.updateStats();
+        setInterval(() => this.updateStats(), this.updateInterval);
+    }
+
+    randomChange(current, min, max) {
+        const change = (Math.random() - 0.5) * 2;
+        const newValue = current + change;
+        return Math.max(min, Math.min(max, newValue));
+    }
+
+    updateStats() {
+        Object.keys(this.stats).forEach(key => {
+            const stat = this.stats[key];
+            const newValue = this.randomChange(stat.value, stat.min, stat.max);
+            stat.value = newValue;
+            
+            const elements = document.querySelectorAll(`[data-stat="${key}"]`);
+            elements.forEach(el => {
+                const formattedValue = Number.isInteger(newValue) 
+                    ? newValue.toString() 
+                    : newValue.toFixed(1);
+                el.textContent = formattedValue;
+
+                // Add animation
+                el.classList.add('stat-update');
+                setTimeout(() => el.classList.remove('stat-update'), 500);
+            });
+        });
+    }
+}
+
+// ROI Calculator
+class ROICalculator {
+    constructor() {
+        this.submissionsRange = document.getElementById('submissions-range');
+        this.hourlyRate = document.getElementById('hourly-rate');
+        this.monthlySavings = document.getElementById('monthly-savings');
+        this.timeSaved = document.getElementById('time-saved');
+        this.init();
+    }
+
+    init() {
+        [this.submissionsRange, this.hourlyRate].forEach(el => {
+            el.addEventListener('input', () => this.calculate());
+        });
+        this.calculate();
+    }
+
+    calculate() {
+        const submissions = parseInt(this.submissionsRange.value);
+        const rate = parseInt(this.hourlyRate.value);
+        const timePerSubmission = 0.8; // hours
+        const totalTime = submissions * timePerSubmission;
+        const savings = totalTime * rate;
+
+        this.monthlySavings.textContent = savings.toLocaleString();
+        this.timeSaved.textContent = totalTime.toFixed(0);
+
+        // Animate the change
+        [this.monthlySavings, this.timeSaved].forEach(el => {
+            el.classList.add('value-update');
+            setTimeout(() => el.classList.remove('value-update'), 500);
+        });
+    }
+}
+
+// Referral System
+class ReferralSystem {
+    constructor() {
+        this.referralCode = this.generateCode();
+        this.init();
+    }
+
+    generateCode() {
+        return 'VR' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    init() {
+        const referralButtons = document.querySelectorAll('[data-referral]');
+        referralButtons.forEach(button => {
+            button.addEventListener('click', () => this.share(button.dataset.referral));
+        });
+    }
+
+    async share(platform) {
+        const url = `https://vrance.ai?ref=${this.referralCode}`;
+        const text = 'Join me on Vrance - The future of business broadcasting! 🚀';
+        
+        switch(platform) {
+            case 'twitter':
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);
+                break;
+            case 'linkedin':
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`);
+                break;
+            case 'copy':
+                try {
+                    await navigator.clipboard.writeText(url);
+                    this.showToast('Referral link copied!');
+                } catch (err) {
+                    this.showToast('Failed to copy link');
+                }
+                break;
+        }
+    }
+
+    showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-4 right-4 bg-[#FF3B3B] text-white px-4 py-2 rounded-lg shadow-lg';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+}
+
+// Form Handling
+class FormHandler {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', (e) => this.handleSubmit(e));
+        });
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+
+        try {
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Show success
+            this.showToast('Successfully submitted! We\'ll be in touch soon.');
+            form.reset();
+        } catch (error) {
+            this.showToast('Error submitting form. Please try again.');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+        }
+    }
+
+    showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-4 right-4 bg-[#FF3B3B] text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fadeIn';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('animate-fadeOut');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Intersection Observer for Animations
+const observeElements = () => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fadeIn');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.card, .section-title, .feature-item').forEach(el => {
+        observer.observe(el);
+    });
+};
+
+// Initialize Everything
+document.addEventListener('DOMContentLoaded', () => {
+    new LiveStats();
+    new ROICalculator();
+    new ReferralSystem();
+    new FormHandler();
+    observeElements();
+});
+
+// Add some CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(20px); }
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .animate-fadeOut {
+        animation: fadeOut 0.3s ease-out forwards;
+    }
+
+    .stat-update {
+        animation: pulse 0.5s ease-out;
+    }
+
+    .value-update {
+        animation: highlight 0.5s ease-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes highlight {
+        0% { color: var(--studio-red); }
+        100% { color: inherit; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>
